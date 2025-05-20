@@ -27,8 +27,9 @@ public class UserDTO {
 
     private boolean isAdmin;
 
-    @NotEmpty(message = "Mã giáo viên không được để trống")
     private Integer teacherId;
+
+    private TeacherDTO teacher;
 
     public UserDTO(String email, String password) {
         this.email = email;

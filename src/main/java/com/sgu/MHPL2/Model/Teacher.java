@@ -21,8 +21,9 @@ public class Teacher {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "position_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "position_id", nullable = false,
+                foreignKey = @ForeignKey(name = "FK_teacher_position"))
     private Position position;
 
     @Column(nullable = false, updatable = false)
