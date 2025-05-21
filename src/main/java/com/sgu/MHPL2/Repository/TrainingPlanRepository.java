@@ -30,21 +30,23 @@ public interface TrainingPlanRepository extends JpaRepository<TrainingPlan, Inte
     List<TrainingPlan> findByStatus(@Param("status") String status);
 
     @Query("SELECT tp FROM TrainingPlan tp WHERE " +
-           "(:academicYear IS NULL OR tp.academicYear = :academicYear) AND " +
            "(:semester IS NULL OR tp.semester = :semester) AND " +
-           "(:department IS NULL OR tp.department = :department) AND " +
-           "(:status IS NULL OR tp.status = :status) AND " +
-           "(:isActive IS NULL OR tp.isActive = :isActive)")
+           "(:academicYear IS NULL OR tp.academicYear = :academicYear) AND " +
+           "(:status IS NULL OR tp.status = :status)")
     Page<TrainingPlan> findByFilters(
-            @Param("academicYear") String academicYear,
             @Param("semester") Integer semester,
-            @Param("department") String department,
+            @Param("academicYear") String academicYear,
             @Param("status") String status,
-            @Param("isActive") Boolean isActive,
             Pageable pageable);
 
-    @Query("SELECT tp FROM TrainingPlan tp WHERE " +
-           "LOWER(tp.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(tp.department) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    @Query("SELECT tp FROM TrainingPlan tp WHERE LOWER(tp.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(tp.department) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<TrainingPlan> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT tp FROM TrainingPlan tp WHERE tp.isActive = true")
+    List<TrainingPlan> findByIsActiveTrue();
+
+    @Query("SELECT tp FROM TrainingPlan tp WHERE tp.academicYear = :academicYear AND tp.semester = :semester")
+    List<TrainingPlan> findByAcademicYearAndSemester(
+            @Param("academicYear") String academicYear,
+            @Param("semester") Integer semester);
 }

@@ -19,6 +19,9 @@ public interface ClassGroupRepository extends JpaRepository<ClassGroup, Integer>
     @Query("SELECT cg FROM ClassGroup cg WHERE cg.teacherId = :teacherId")
     List<ClassGroup> findByTeacherId(@Param("teacherId") Integer teacherId);
 
+    @Query("SELECT cg FROM ClassGroup cg WHERE cg.trainingPlanId = :trainingPlanId")
+    List<ClassGroup> findByTrainingPlanId(@Param("trainingPlanId") Integer trainingPlanId);
+
     @Query("SELECT cg FROM ClassGroup cg WHERE " +
            "(:semester IS NULL OR cg.semester = :semester) AND " +
            "(:schoolYear IS NULL OR cg.schoolYear = :schoolYear) AND " +
@@ -33,4 +36,8 @@ public interface ClassGroupRepository extends JpaRepository<ClassGroup, Integer>
            "LOWER(cg.groupCode) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
            "LOWER(cg.location) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<ClassGroup> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+    boolean existsByTrainingPlanId(Integer id);
+
+    void deleteByTrainingPlanId(Integer id);
 }

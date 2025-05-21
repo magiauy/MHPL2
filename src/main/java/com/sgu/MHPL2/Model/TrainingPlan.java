@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "training_plan")
@@ -60,7 +60,7 @@ public class TrainingPlan {
     private String status; // DRAFT, PENDING, APPROVED, REJECTED
 
     @OneToMany(mappedBy = "trainingPlan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TrainingPlanClassGroup> classGroups = new HashSet<>();
+    private List<ClassGroup> classGroups = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "class_group")
@@ -45,6 +45,13 @@ public class ClassGroup {
     @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
     private Teacher teacher;
 
+    @Column(name = "training_plan_id")
+    private Integer trainingPlanId;
+
+    @ManyToOne
+    @JoinColumn(name = "training_plan_id", insertable = false, updatable = false)
+    private TrainingPlan trainingPlan;
+
     @Column(name = "semester", nullable = false)
     private Integer semester;
 
@@ -67,7 +74,7 @@ public class ClassGroup {
     private String status; // PLANNED, ACTIVE, COMPLETED, CANCELLED
 
     @OneToMany(mappedBy = "classGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<TrainingPlanClassGroup> trainingPlans = new HashSet<>();
+    private List<TeacherAssignment> teacherAssignments = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

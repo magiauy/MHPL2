@@ -1,12 +1,24 @@
 package com.sgu.MHPL2.DTO;
 
 import com.sgu.MHPL2.Model.ClassGroup;
+import com.sgu.MHPL2.Model.TeacherAssignment;
+import com.sgu.MHPL2.Repository.TeacherAssignmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class ClassGroupMapper {
 
-    public static ClassGroupDTO toDTO(ClassGroup classGroup) {
+    @Autowired
+    private TeacherAssignmentMapper teacherAssignmentMapper;
+
+    @Autowired
+    private TeacherAssignmentRepository teacherAssignmentRepository;
+
+    public ClassGroupDTO toDTO(ClassGroup classGroup) {
         if (classGroup == null) {
             return null;
         }
@@ -18,6 +30,7 @@ public class ClassGroupMapper {
                 .studentCount(classGroup.getStudentCount())
                 .maxStudentCount(classGroup.getMaxStudentCount())
                 .teacherId(classGroup.getTeacherId())
+                .trainingPlanId(classGroup.getTrainingPlanId())
                 .semester(classGroup.getSemester())
                 .schoolYear(classGroup.getSchoolYear())
                 .dayOfWeek(classGroup.getDayOfWeek())
@@ -36,10 +49,22 @@ public class ClassGroupMapper {
             builder.teacherName(classGroup.getTeacher().getName());
         }
 
+        if (classGroup.getTrainingPlan() != null) {
+            builder.trainingPlanName(classGroup.getTrainingPlan().getName());
+        }
+
+        // Map teacher assignments
+        if (classGroup.getTeacherAssignments() != null) {
+            List<TeacherAssignmentDTO> teacherAssignmentDTOs = classGroup.getTeacherAssignments().stream()
+                    .map(teacherAssignmentMapper::toDTO)
+                    .collect(Collectors.toList());
+            builder.teacherAssignments(teacherAssignmentDTOs);
+        }
+
         return builder.build();
     }
 
-    public static ClassGroup toEntity(ClassGroupDTO dto) {
+    public ClassGroup toEntity(ClassGroupDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -51,6 +76,7 @@ public class ClassGroupMapper {
                 .studentCount(dto.getStudentCount())
                 .maxStudentCount(dto.getMaxStudentCount())
                 .teacherId(dto.getTeacherId())
+                .trainingPlanId(dto.getTrainingPlanId())
                 .semester(dto.getSemester())
                 .schoolYear(dto.getSchoolYear())
                 .dayOfWeek(dto.getDayOfWeek())

@@ -11,8 +11,8 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -55,7 +55,7 @@ public class TrainingPlanDTO {
     @NotEmpty(message = "Trạng thái không được để trống")
     private String status;
 
-    private Set<TrainingPlanClassGroupDTO> classGroups = new HashSet<>();
+    private List<ClassGroupDTO> classGroups = new ArrayList<>();
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

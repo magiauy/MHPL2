@@ -1,12 +1,19 @@
 package com.sgu.MHPL2.DTO;
 
 import com.sgu.MHPL2.Model.TrainingPlan;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
+@RequiredArgsConstructor
 public class TrainingPlanMapper {
 
-    public static TrainingPlanDTO toDTO(TrainingPlan trainingPlan) {
+    private ClassGroupMapper classGroupMapper;
+
+    public TrainingPlanDTO toDTO(TrainingPlan trainingPlan) {
         if (trainingPlan == null) {
             return null;
         }
@@ -28,17 +35,17 @@ public class TrainingPlanMapper {
                 .createdAt(trainingPlan.getCreatedAt())
                 .updatedAt(trainingPlan.getUpdatedAt());
 
-        // Chuyển đổi danh sách các classGroups
+        // Map class groups directly
         if (trainingPlan.getClassGroups() != null && !trainingPlan.getClassGroups().isEmpty()) {
             builder.classGroups(trainingPlan.getClassGroups().stream()
-                    .map(TrainingPlanClassGroupMapper::toDTO)
-                    .collect(Collectors.toSet()));
+                    .map(classGroupMapper::toDTO)
+                    .collect(Collectors.toList()));
         }
 
         return builder.build();
     }
 
-    public static TrainingPlan toEntity(TrainingPlanDTO dto) {
+    public TrainingPlan toEntity(TrainingPlanDTO dto) {
         if (dto == null) {
             return null;
         }
